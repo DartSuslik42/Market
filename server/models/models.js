@@ -50,9 +50,12 @@ const Delivery = sequelize.define('delivery', {
     cords: {type: DataTypes.STRING, allowNull: false},
     comment: {type: DataTypes.STRING},
     price: {type: DataTypes.FLOAT, allowNull: false},
-    isStarted: {type: DataTypes.BOOLEAN, defaultValue: false},
-    isFinished: {type: DataTypes.BOOLEAN, defaultValue: false},
-    price: {type: DataTypes.FLOAT, allowNull: false},
+    isStarted: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    isFinished: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    isToMarket: {type: DataTypes.BOOLEAN, allowNull: false},
+    isAcceptedByOwner: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    isAcceptedByCarrier: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    isAcceptedByMarket: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
 })
 
 const Delivery_Blocks = sequelize.define('delivery_blocks', {
@@ -73,19 +76,19 @@ Blocks.belongsToMany(Users, {through: Orders})
 
 //Delivery
 Users.hasMany(Delivery, {
-    foreignKey: 'user_to',
-    as: 'delivery_to_me',
+    foreignKey: 'user_owner',
+    as: 'delivery',
 })
 Delivery.belongsTo(Users, {
-    foreignKey: 'user_to',
+    foreignKey: 'user_owner',
     as: 'owner',
 })
 Users.hasMany(Delivery, {
-    foreignKey: 'user_by',
+    foreignKey: 'user_carrier',
     as: 'delivery_to_do',
 })
 Delivery.belongsTo(Users, {
-    foreignKey: 'user_by',
+    foreignKey: 'user_carrier',
     as: 'carrier',
 })
 Delivery.belongsToMany(Blocks, {through: Delivery_Blocks})
